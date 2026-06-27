@@ -12,12 +12,10 @@ export const AuthProvider = ({ children }) => {
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
 
-    console.log("AuthContext useEffect - storedToken:", storedToken, "storedUser:", storedUser);
-
     if (storedToken && storedUser && storedUser !== "undefined") {
       try {
         const parsedUser = JSON.parse(storedUser);
-        console.log("AuthContext - parsedUser:", parsedUser);
+       
         setToken(storedToken);
         setUser(parsedUser);
       } catch (error) {
