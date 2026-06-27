@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     if (storedToken && storedUser && storedUser !== "undefined") {
       try {
         const parsedUser = JSON.parse(storedUser);
-       
+
         setToken(storedToken);
         setUser(parsedUser);
       } catch (error) {
