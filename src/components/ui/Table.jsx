@@ -1,7 +1,12 @@
-import { Inbox } from 'lucide-react';
-import { Spinner } from './Spinner';
+import { Inbox } from "lucide-react";
+import { Spinner } from "./Spinner";
 
-export const Table = ({ columns, data, isLoading, emptyMessage = 'No data found' }) => {
+export const Table = ({
+  columns,
+  data,
+  isLoading,
+  emptyMessage = "No data found",
+}) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -24,9 +29,9 @@ export const Table = ({ columns, data, isLoading, emptyMessage = 'No data found'
       <table className="w-full">
         <thead className="bg-gray-50">
           <tr>
-            {columns.map(col => (
-              <th 
-                key={col.key} 
+            {columns.map((col) => (
+              <th
+                key={col.key}
                 className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
                 {col.label}
@@ -37,11 +42,22 @@ export const Table = ({ columns, data, isLoading, emptyMessage = 'No data found'
         <tbody className="bg-white divide-y divide-gray-200">
           {data.map((row, rowIndex) => (
             <tr key={rowIndex} className="hover:bg-gray-50">
-              {columns.map(col => (
-                <td key={col.key} className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                  {col.render ? col.render(row, rowIndex) : row[col.key]}
-                </td>
-              ))}
+              {columns.map((col) => {
+                const value = col.render
+                  ? col.render(row, rowIndex)
+                  : row[col.key];
+
+                return (
+                  <td
+                    key={col.key}
+                    className="px-4 py-3 whitespace-nowrap text-sm text-gray-900"
+                  >
+                    {value !== null && value !== undefined && value !== ""
+                      ? value
+                      : "NA"}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

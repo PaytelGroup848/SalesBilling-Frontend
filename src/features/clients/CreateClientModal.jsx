@@ -1,42 +1,42 @@
-import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createClient } from '../../api/clients.api';
-import { Modal } from '../../components/ui/Modal';
-import { Input } from '../../components/ui/Input';
-import { Button } from '../../components/ui/Button';
-import toast from 'react-hot-toast';
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createClient } from "../../api/clients.api";
+import { Modal } from "../../components/ui/Modal";
+import { Input } from "../../components/ui/Input";
+import { Button } from "../../components/ui/Button";
+import toast from "react-hot-toast";
 
 export const CreateClientModal = ({ isOpen, onClose }) => {
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
-    representativeName: '',
-    companyName: '',
-    phone: '',
-    address: '',
-    email: '',
-    gstNumber: '',
-    salesRepName: ''
+    representativeName: "",
+    companyName: "",
+    phone: "",
+    address: "",
+    email: "",
+    gstNumber: "",
+    salesRepName: "",
   });
 
   const mutation = useMutation({
     mutationFn: createClient,
     onSuccess: () => {
-      toast.success('Client created successfully!');
-      queryClient.invalidateQueries(['clients']);
+      toast.success("Client created successfully!");
+      queryClient.invalidateQueries(["clients"]);
       onClose();
       setFormData({
-        representativeName: '',
-        companyName: '',
-        phone: '',
-        address: '',
-        email: '',
-        gstNumber: '',
-        salesRepName: ''
+        representativeName: "",
+        companyName: "",
+        phone: "",
+        address: "",
+        email: "",
+        gstNumber: "",
+        salesRepName: "",
       });
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || 'Failed to create client');
-    }
+      toast.error(error.response?.data?.message || "Failed to create client");
+    },
   });
 
   const handleSubmit = (e) => {
@@ -60,11 +60,10 @@ export const CreateClientModal = ({ isOpen, onClose }) => {
             required
           />
           <Input
-            label="Company Name *"
+            label="Company Name "
             name="companyName"
             value={formData.companyName}
             onChange={handleChange}
-            required
           />
           <Input
             label="Phone *"
@@ -101,11 +100,16 @@ export const CreateClientModal = ({ isOpen, onClose }) => {
           />
         </div>
         <div className="flex justify-end gap-3 pt-4">
-          <Button type="button" variant="secondary" onClick={onClose} disabled={mutation.isPending}>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+            disabled={mutation.isPending}
+          >
             Cancel
           </Button>
           <Button type="submit" disabled={mutation.isPending}>
-            {mutation.isPending ? 'Creating...' : 'Create Client'}
+            {mutation.isPending ? "Creating..." : "Create Client"}
           </Button>
         </div>
       </form>
