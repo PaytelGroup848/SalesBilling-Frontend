@@ -114,7 +114,7 @@ export const AllBills = () => {
               setIsViewModalOpen(true);
             }}
           >
-            <Eye className="w-4 h-4" />
+            <Eye className="w-4 h-4 text-blue-500" />
           </Button>
           <Button
             variant="ghost"
@@ -131,7 +131,7 @@ export const AllBills = () => {
             size="sm"
             onClick={() => handleDownloadPdf(row._id)}
           >
-            <Download className="w-4 h-4" />
+            <Download className="w-4 h-4 text-green-500" />
           </Button>
           <Button
             variant="ghost"
@@ -141,7 +141,7 @@ export const AllBills = () => {
               setIsDeleteConfirmOpen(true);
             }}
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-4 h-4 text-red-500" />
           </Button>
         </div>
       ),

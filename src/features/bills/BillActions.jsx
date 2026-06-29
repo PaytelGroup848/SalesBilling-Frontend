@@ -14,6 +14,7 @@ import {
   User,
   FileText,
   XCircle,
+  Loader2,
 } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import { Modal } from "../../components/ui/Modal";
@@ -31,6 +32,7 @@ import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 
 export const BillActions = ({ bill, onView, onEdit }) => {
+  console.log("this is my bill", bill);
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -40,6 +42,7 @@ export const BillActions = ({ bill, onView, onEdit }) => {
   const [isRejectionInfoOpen, setIsRejectionInfoOpen] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
 
+  // Submit Mutation
   const submitMutation = useMutation({
     mutationFn: () => submitBill(bill._id),
     onSuccess: () => {
@@ -50,6 +53,7 @@ export const BillActions = ({ bill, onView, onEdit }) => {
       toast.error(error.response?.data?.message || "Failed to submit bill"),
   });
 
+  // Approve Mutation
   const approveMutation = useMutation({
     mutationFn: () => approveBill(bill._id),
     onSuccess: () => {
@@ -61,6 +65,7 @@ export const BillActions = ({ bill, onView, onEdit }) => {
       toast.error(error.response?.data?.message || "Failed to approve bill"),
   });
 
+  // Reject Mutation
   const rejectMutation = useMutation({
     mutationFn: () => rejectBill(bill._id, { reason: rejectReason }),
     onSuccess: () => {
@@ -73,6 +78,7 @@ export const BillActions = ({ bill, onView, onEdit }) => {
       toast.error(error.response?.data?.message || "Failed to reject bill"),
   });
 
+  // Send Email Mutation
   const sendEmailMutation = useMutation({
     mutationFn: () => sendBillEmail(bill._id),
     onSuccess: () => {
@@ -88,7 +94,7 @@ export const BillActions = ({ bill, onView, onEdit }) => {
   };
 
   const canEdit =
-    (user.role === "sales" && ["draft"].includes(bill.status)) ||
+    (user.role === "sales" && ["draft", "rejected"].includes(bill.status)) ||
     user.role === "superadmin" ||
     user.role === "accountant";
 
@@ -101,102 +107,164 @@ export const BillActions = ({ bill, onView, onEdit }) => {
   // Check if bill is rejected
   const isRejected = bill.status === "rejected";
 
+  // Loading states
+  const isLoading =
+    submitMutation.isPending ||
+    approveMutation.isPending ||
+    rejectMutation.isPending ||
+    sendEmailMutation.isPending;
+
   return (
     <>
       <div className="flex items-center gap-1">
+        {/* View Button */}
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setIsViewModalOpen(true)}
+          disabled={isLoading}
         >
           <Eye className="w-4 h-4 text-blue-500" />
         </Button>
 
+        {/* Edit Button */}
         {canEdit && (
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setIsEditModalOpen(true)}
+            disabled={isLoading}
           >
-            <Edit className="w-4 h-4 " />
+            <Edit className="w-4 h-4" />
           </Button>
         )}
-        <Button variant="ghost" size="sm" onClick={handleDownloadPdf}>
-          <Download className="w-4 h-4 text-green-600" />
+
+        {/* Download Button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleDownloadPdf}
+          disabled={isLoading}
+        >
+          <Download className="w-4 h-4 text-green-500" />
         </Button>
 
-        {/* Show rejection info icon when bill is rejected */}
+        {/* Rejection Info Button */}
         {isRejected && (
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setIsRejectionInfoOpen(true)}
             className="text-red-600 hover:text-red-700 hover:bg-red-50"
+            disabled={isLoading}
           >
-            <AlertCircle className="w-4.5 h-4.5" />
+            <XCircle className="w-4 h-4" />
           </Button>
         )}
 
+        {/* Submit Button */}
         {canSubmit && (
           <Button
             variant="ghost"
             size="sm"
             onClick={() => submitMutation.mutate()}
+            className="border border-[#b1b1fa]"
+            disabled={submitMutation.isPending}
           >
-            <Send className="w-4 h-4" />
+            {submitMutation.isPending ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                Sending...
+              </>
+            ) : (
+              <>
+                Send
+                <Send className="w-4 h-4 text-[#4F39F6]" />
+              </>
+            )}
           </Button>
         )}
+
+        {/* Send Email Button */}
         {canSendEmail && (
           <Button
             variant="ghost"
             size="sm"
             onClick={() => sendEmailMutation.mutate()}
+            disabled={sendEmailMutation.isPending}
+            className="border border-amber-200 bg-amber-50 hover:bg-amber-100"
           >
-            <Mail className="w-4 h-4" />
+            {sendEmailMutation.isPending ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                Sending...
+              </>
+            ) : (
+              <>
+                <span className="text-amber-500">Send</span>
+                <Mail className="w-4.5 h-4.5 text-amber-500 " />
+              </>
+            )}
           </Button>
         )}
+
+        {/* Approve/Reject Buttons */}
         {canApproveReject && (
           <>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsApproveConfirmOpen(true)}
+              disabled={approveMutation.isPending}
             >
-              <Check className="w-4 h-4 text-green-600" />
+              {approveMutation.isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin text-green-600" />
+              ) : (
+                <Check className="w-4 h-4 text-green-600" />
+              )}
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsRejectModalOpen(true)}
+              disabled={rejectMutation.isPending}
             >
-              <X className="w-4 h-4 text-red-600" />
+              {rejectMutation.isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin text-red-600" />
+              ) : (
+                <X className="w-4 h-4 text-red-600" />
+              )}
             </Button>
           </>
         )}
       </div>
 
+      {/* View Bill Modal */}
       <ViewBillModal
         isOpen={isViewModalOpen}
         onClose={() => setIsViewModalOpen(false)}
         bill={bill}
       />
 
+      {/* Edit Bill Modal */}
       <EditBillModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         bill={bill}
       />
 
+      {/* Approve Confirm Dialog */}
       <ConfirmDialog
         isOpen={isApproveConfirmOpen}
         onClose={() => setIsApproveConfirmOpen(false)}
         onConfirm={() => approveMutation.mutate()}
         title="Approve Bill"
         message="Are you sure you want to approve this bill?"
-        confirmText="Approve"
+        confirmText={approveMutation.isPending ? "Approving..." : "Approve"}
         isLoading={approveMutation.isPending}
       />
 
+      {/* Reject Modal */}
       <Modal
         isOpen={isRejectModalOpen}
         onClose={() => setIsRejectModalOpen(false)}
@@ -220,6 +288,7 @@ export const BillActions = ({ bill, onView, onEdit }) => {
             onChange={(e) => setRejectReason(e.target.value)}
             placeholder="Please provide a reason for rejecting this bill"
             required
+            disabled={rejectMutation.isPending}
           />
           <div className="flex justify-end gap-3">
             <Button
@@ -234,7 +303,14 @@ export const BillActions = ({ bill, onView, onEdit }) => {
               type="submit"
               disabled={rejectMutation.isPending || !rejectReason.trim()}
             >
-              {rejectMutation.isPending ? "Rejecting..." : "Reject"}
+              {rejectMutation.isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Rejecting...
+                </>
+              ) : (
+                "Reject"
+              )}
             </Button>
           </div>
         </form>
@@ -345,9 +421,23 @@ export const BillActions = ({ bill, onView, onEdit }) => {
             <Button
               variant="secondary"
               onClick={() => setIsRejectionInfoOpen(false)}
+              disabled={isLoading}
             >
               Close
             </Button>
+            {canEdit && (
+              <Button
+                variant="primary"
+                onClick={() => {
+                  setIsRejectionInfoOpen(false);
+                  setIsEditModalOpen(true);
+                }}
+                disabled={isLoading}
+              >
+                <Edit className="w-4 h-4 mr-2" />
+                Edit Bill
+              </Button>
+            )}
           </div>
         </div>
       </Modal>
