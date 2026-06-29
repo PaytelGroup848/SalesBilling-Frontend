@@ -33,7 +33,7 @@ export const AccountantBilling = () => {
   };
 
   const columns = [
-    { key: "index", label: "#", render: (_, i) => (page - 1) * 10 + i + 1 },
+    { key: "index", label: "S.no", render: (_, i) => (page - 1) * 10 + i + 1 },
     { key: "billNumber", label: "Bill No" },
     {
       key: "client",
