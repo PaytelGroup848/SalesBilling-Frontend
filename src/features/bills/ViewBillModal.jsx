@@ -237,6 +237,46 @@ export const ViewBillModal = ({ isOpen, onClose, bill }) => {
           </div>
         </div>
 
+        {/* {bill.status === "approved" && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "25px",
+              right: "25px",
+              transform: "rotate(-20deg)",
+              zIndex: 10,
+              pointerEvents: "none",
+              border: "5px solid #16a34a",
+              borderRadius: 12,
+              padding: "10px 28px",
+              textAlign: "center",
+              opacity: 0.2,
+            }}
+          >
+            <div
+              style={{
+                fontSize: 52,
+                fontWeight: 900,
+                color: "#16a34a",
+                letterSpacing: 4,
+                lineHeight: 1,
+              }}
+            >
+              PAID
+            </div>
+            <div
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                color: "#16a34a",
+                letterSpacing: 1,
+              }}
+            >
+              APPROVED
+            </div>
+          </div>
+        )} */}
+
         {/* ── Top Grid: Company + Invoice Meta ── */}
         <div
           style={{

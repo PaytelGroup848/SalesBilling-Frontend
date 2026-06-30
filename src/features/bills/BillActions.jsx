@@ -96,7 +96,7 @@ export const BillActions = ({ bill, onView, onEdit }) => {
   const canEdit =
     (user.role === "sales" && ["draft", "rejected"].includes(bill.status)) ||
     user.role === "superadmin" ||
-    (user.role === "accountant" && ["draft", "rejected"].includes(bill.status));
+    (user.role === "accountant" && ["pending_approval"].includes(bill.status));
 
   const canSubmit = user.role === "sales" && bill.status === "draft";
   const canApproveReject =
