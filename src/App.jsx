@@ -8,6 +8,7 @@ import { AccountantBilling } from "./pages/accountant/AccountantBilling.jsx";
 import { SuperAdminDashboard } from "./pages/superadmin/SuperAdminDashboard.jsx";
 import { Users } from "./pages/superadmin/Users.jsx";
 import { AllBills } from "./pages/superadmin/AllBills.jsx";
+import { AllClients } from "./pages/superadmin/AllClients.jsx";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, isLoading } = useAuth();
@@ -86,6 +87,11 @@ function App() {
       <Route path="/admin/bills" element={
         <ProtectedRoute allowedRoles={['superadmin']}>
           <AllBills />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/clients" element={
+        <ProtectedRoute allowedRoles={['superadmin']}>
+          <AllClients />
         </ProtectedRoute>
       } />
     </Routes>

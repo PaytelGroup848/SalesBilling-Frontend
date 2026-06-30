@@ -1,29 +1,28 @@
-import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, FileText } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext.jsx';
+import { NavLink, useLocation } from "react-router-dom";
+import { LayoutDashboard, Users, FileText, Building2 } from "lucide-react";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 export const Sidebar = () => {
   const { user } = useAuth();
   const location = useLocation();
 
   const getNavItems = () => {
-    if (user.role === 'superadmin') {
+    if (user.role === "superadmin") {
       return [
-        { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-        { to: '/admin/users', icon: Users, label: 'Users' },
-        { to: '/admin/bills', icon: FileText, label: 'All Bills' }
+        { to: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+        { to: "/admin/users", icon: Users, label: "Team Members" },
+        { to: "/admin/clients", icon: Building2, label: "All Clients" },
+        { to: "/admin/bills", icon: FileText, label: "All Bills" },
       ];
     }
-    if (user.role === 'sales') {
+    if (user.role === "sales") {
       return [
-        { to: '/sales/clients', icon: Users, label: 'Clients' },
-        { to: '/sales/billing', icon: FileText, label: 'Billing' }
+        { to: "/sales/clients", icon: Users, label: "Clients" },
+        { to: "/sales/billing", icon: FileText, label: "Billing" },
       ];
     }
-    if (user.role === 'accountant') {
-      return [
-        { to: '/accountant/billing', icon: FileText, label: 'Billing' }
-      ];
+    if (user.role === "accountant") {
+      return [{ to: "/accountant/billing", icon: FileText, label: "Billing" }];
     }
     return [];
   };
@@ -45,9 +44,10 @@ export const Sidebar = () => {
               className={`
                 flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium
                 transition-colors duration-200
-                ${isActive 
-                  ? 'bg-indigo-50 text-indigo-700 border-l-2 border-indigo-600' 
-                  : 'text-gray-600 hover:bg-gray-100'
+                ${
+                  isActive
+                    ? "bg-indigo-50 text-indigo-700 border-l-2 border-indigo-600"
+                    : "text-gray-600 hover:bg-gray-100"
                 }
               `}
             >

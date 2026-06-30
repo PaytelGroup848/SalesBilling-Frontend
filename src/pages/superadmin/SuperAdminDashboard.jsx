@@ -1,17 +1,24 @@
-import { useQuery } from '@tanstack/react-query';
-import { LayoutDashboard, Users, FileText, CheckCircle, Clock, XCircle } from 'lucide-react';
-import { Layout } from '../../components/layout/Layout';
-import { getUsers } from '../../api/users.api';
-import { getClients } from '../../api/clients.api';
-import { getBills } from '../../api/bills.api';
+import { useQuery } from "@tanstack/react-query";
+import {
+  LayoutDashboard,
+  Users,
+  FileText,
+  CheckCircle,
+  Clock,
+  XCircle,
+} from "lucide-react";
+import { Layout } from "../../components/layout/Layout";
+import { getUsers } from "../../api/users.api";
+import { getClients } from "../../api/clients.api";
+import { getBills } from "../../api/bills.api";
 
-const StatCard = ({ icon: Icon, label, value, color = 'indigo' }) => {
+const StatCard = ({ icon: Icon, label, value, color = "indigo" }) => {
   const colorClasses = {
-    indigo: 'bg-indigo-50 text-indigo-600',
-    blue: 'bg-blue-50 text-blue-600',
-    green: 'bg-green-50 text-green-600',
-    yellow: 'bg-yellow-50 text-yellow-600',
-    red: 'bg-red-50 text-red-600'
+    indigo: "bg-indigo-50 text-indigo-600",
+    blue: "bg-blue-50 text-blue-600",
+    green: "bg-green-50 text-green-600",
+    yellow: "bg-yellow-50 text-yellow-600",
+    red: "bg-red-50 text-red-600",
   };
 
   return (
@@ -31,30 +38,34 @@ const StatCard = ({ icon: Icon, label, value, color = 'indigo' }) => {
 
 export const SuperAdminDashboard = () => {
   const { data: usersData } = useQuery({
-    queryKey: ['users'],
-    queryFn: () => getUsers({ limit: 100 })
+    queryKey: ["users"],
+    queryFn: () => getUsers({ limit: 100 }),
   });
 
   const { data: clientsData } = useQuery({
-    queryKey: ['clients'],
-    queryFn: () => getClients({ limit: 100 })
+    queryKey: ["clients"],
+    queryFn: () => getClients({ limit: 100 }),
   });
 
   const { data: billsData } = useQuery({
-    queryKey: ['bills'],
-    queryFn: () => getBills({ limit: 100 })
+    queryKey: ["bills"],
+    queryFn: () => getBills({ limit: 100 }),
   });
 
-  const approvedBills = billsData?.bills?.filter(b => b.status === 'approved').length || 0;
-  const pendingBills = billsData?.bills?.filter(b => b.status === 'pending_approval').length || 0;
-  const rejectedBills = billsData?.bills?.filter(b => b.status === 'rejected').length || 0;
+  const approvedBills =
+    billsData?.bills?.filter((b) => b.status === "approved").length || 0;
+  const pendingBills =
+    billsData?.bills?.filter((b) => b.status === "pending_approval").length ||
+    0;
+  const rejectedBills =
+    billsData?.bills?.filter((b) => b.status === "rejected").length || 0;
 
   return (
     <Layout pageTitle="Dashboard">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <StatCard
           icon={Users}
-          label="Total Users"
+          label="Team Members"
           value={usersData?.total || 0}
           color="blue"
         />
