@@ -171,7 +171,11 @@ export const ViewBillModal = ({ isOpen, onClose, bill }) => {
     ) || [];
 
   const handleDownloadPdf = () => {
-    window.open(`http://localhost:3000/api/pdf/${bill._id}`, "_blank");
+    window.open(
+      `https://billing.fairwoodit.com/api/pdf/${bill._id}` ||
+        `http://localhost:3000/api/pdf/${bill._id}`,
+      "_blank",
+    );
   };
 
   const fillerTd = {

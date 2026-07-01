@@ -62,7 +62,11 @@ export const AllBills = () => {
   });
 
   const handleDownloadPdf = (billId) => {
-    window.open(`http://localhost:3000/api/pdf/${billId}`, "_blank");
+    window.open(
+      `https://billing.fairwoodit.com/api/pdf/${billId}` ||
+        `http://localhost:3000/api/pdf/${billId}`,
+      "_blank",
+    );
   };
 
   const serviceNames = {
